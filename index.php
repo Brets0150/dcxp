@@ -75,6 +75,15 @@ function fun_closeNav() {
 </div>
 <span style="font-size:30px;cursor:pointer" onclick="fun_openNav()">&#9776;</span>
 <!-- END Side Navbar -->
-
+<?php
+session_start();
+///
+//  Load the requested page or defailt to the home page.
+if ( isset($_POST["var_page"]) ) {
+	require($_POST["var_page"]);
+}else{
+	require("home.php");
+}
+?>
 </body>
 </html> 
