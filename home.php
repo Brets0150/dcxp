@@ -1,62 +1,8 @@
 <?php
 ///
-// START Home Page Style Code //
-///
-echo '
-<style>
-div.homepage-container {
-    width: 100%;
-    margin: 0px;
-    border: #004ECC;
-    line-height: 150%;
-}
-
-div.header, div.footer {
-    padding: 0.5em;
-    color: white;
-    background-color: gray;
-    clear: left;
-    max-width:750px;
-	display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-}
-
-h1.header {
-    padding: 0;
-    margin: 0;
-}
-
-div.content {
-    margin-left: 10px;
-    padding: 1em;
-    overflow: hidden;
-    max-width:750px;
-	display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-}
-.center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-}
-
-img{
-    max-height:500px;
-    max-width:500px;
-    height:auto;
-    width:auto;
-}
-</style>';
-///
-// END Home Page Style Code //
-///
 // START Home Page Content //
 echo '
+<style> @import "/styles/home.css"; </style>
 <div class="homepage-container">
   <div class="header"><h1 class="header" align="center">Welcome to DC XP Tracker!</h1></div>
   	<div class="content">

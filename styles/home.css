@@ -1,0 +1,44 @@
+/* CSS Document */
+
+div.homepage-container {
+    #width: 100%;
+    margin: 0px;
+    line-height: 150%;
+}
+
+div.header, div.footer {
+    padding: 10px;
+    color: white;
+    background-color: #172EB2;
+    max-width:750px;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+h1.header {
+    padding: 0;
+    margin: 0;
+}
+
+div.content {
+    #margin-left: 10px;
+    padding: 20px;
+    overflow: hidden;
+    max-width:750px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+img{
+    max-height:500px;
+    max-width:500px;
+    height:auto;
+    width:auto;
+}
