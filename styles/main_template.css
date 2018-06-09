@@ -1,6 +1,6 @@
 /* CSS Document */
 
-body {
+body,td,th {
 	font-family: "Lato", sans-serif;
 	background-color: #;
 }
@@ -37,7 +37,6 @@ input[type=submit] {
     font-size: 25px;
     color: #4C91FF;
     background-color: #172FB2;
-    #display: block;
     transition: 0.3s;
 	border: none;
 }
@@ -61,6 +60,5 @@ input[type=text]:focus {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
-body,td,th {
-	font-family: Lato, sans-serif;
-}
+
+

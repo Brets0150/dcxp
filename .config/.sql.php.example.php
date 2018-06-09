@@ -15,5 +15,12 @@ $str_DataBaseName="YOUR_DATABASE_NAME";
 $str_DataBaseUser="YOUR_DATABASE_USERNAME";
 $str_DataBasePass="YOUR_DATABASE_PASSWORD";
 $str_DataBaseServer="localhost";
-$str_dbConnect=mysqli_connect($DataBaseServer, $DataBaseUser, $DataBasePass, $DataBaseName);
+//
+// Variable for connection to the DB
+$str_dbConnect=mysqli_connect($str_DataBaseServer, $str_DataBaseUser, $str_DataBasePass, $str_DataBaseName);
+//
+// Check DB Connection, if the connection fails kill the process. 
+if($str_dbConnect === false){
+    die("ERROR: DB Connecion Fail. Please report to Admin. " . mysqli_connect_error());
+}
 ?>
