@@ -1,19 +1,28 @@
 /* CSS Document */
 
 div.homepage-container {
-    #width: 100%;
     margin: 0px;
     line-height: 150%;
 }
 
-div.header, div.footer {
+div.header {
     padding: 10px;
     color: white;
     background-color: #172EB2;
     max-width:750px;
     margin-left: auto;
     margin-right: auto;
+}
 
+div.footer {
+	position: fixed;
+    padding: 10px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #172EB2;
+    color: white;
+    text-align: center;
 }
 
 h1.header {
@@ -22,7 +31,7 @@ h1.header {
 }
 
 div.content {
-    #margin-left: 10px;
+    margin-left: 10px;
     padding: 20px;
     overflow: hidden;
     max-width:750px;
@@ -42,3 +51,32 @@ img{
     height:auto;
     width:auto;
 }
+/*  START Admin Contols Page CSS */
+div.sub-navbar {
+    padding: 0px;
+    color: white;
+    background-color: #172EB2;
+    max-width:750px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+div.sub-navbar input[type=submit] {
+    background-color: #172FB2;
+    text-decoration: none;
+	border-width: 0;
+	border-right-width: 1px;
+    font-size: 15px;
+    color: #4C91FF;
+    transition: 0.3s;
+}
+
+div.sub-navbar input[type=submit]:hover {
+	color: #f1f1f1;
+}
+
+div.sub-navbar form {
+    display: inline;
+}
+
+/*  END Admin Contols Page CSS */

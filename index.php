@@ -1,33 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<!-- START HTML HEADER -->
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DC-XP Tracker</title>
-<style> @import "/styles/main_template.css"; </style>
-<script>
-// START Side Navbar control functions ///
-function fun_openNav() {
-    document.getElementById("Sidenav").style.width = "250px";
-} 
-function fun_closeNav() {
-    document.getElementById("Sidenav").style.width = "0";
-}
-// End Side Navbar control functions //
-</script>
-</head>
-<!-- END HTML HEADER -->
-<body>
-<!-- START Side Navbar -->
-<div id="Sidenav" class="sidenav">
-  <a href="javascript:void(0)" class="btn_close" onclick="fun_closeNav()">&times;</a>
 <?php 
+////////////////////////////////////////////////////////////////
+// START Main INDEX Page ///
+///
+// Import Header
+require(".pages/header.php");
+///
+///////// START Side Navbar /////////
+//  Start with top of the side Navbar, style "div.sidenav".
+echo'<div id="Sidenav" class="sidenav">
+<a href="javascript:void(0)" class="btn_close" onclick="fun_closeNav()">&times;</a>';
 ///
 // Build the Navbar base on; 1. A user is logged in; and  2. If the User has Admin rights.
 session_start();
+// Check if a User is already logged in.
 if (isset($_SESSION["str_username"])) {
 	// If User logged in display UserName.
-	echo "User: ".$_SESSION["str_username"];
+	echo '<h1 style="padding: 10px 10px 10px 32px;background-color: #172FB2;text-decoration: none;font-size: 25px;color: white;transition: 0.3s;border: none;">
+	<u>User:&nbsp;&nbsp;'.$_SESSION["str_username"].'</u></h1>';
 	echo '<form action="/" method="post" enctype="multipart/form-data" name="xpr_form"><input name="var_page" type="hidden" value="xp_request" /><input type="submit" value="XP Request" /></form>';
 	echo '<form action="/" method="post" enctype="multipart/form-data" name="xps_form"><input name="var_page" type="hidden" value="xp_score_board" /><input type="submit" value="Score Board" /></form>';
 	// If admin status show admin_control link.
@@ -37,40 +26,42 @@ if (isset($_SESSION["str_username"])) {
 	// Logout Button
 	echo '<form action="/.functions/.login" method="post" enctype="multipart/form-data" name="logout_form">
 	<input name="bln_logout" type="hidden" value="TRUE" /><input type="submit" value="Logout" /></form>';
+///
 } else {
 	// ELSE If User not logged in display login prompt using the "fun_login_form()" funtion.
 	require($_SERVER["DOCUMENT_ROOT"].".functions/.login.php");
 	fun_login_form();
 }
+// Echo out end of div.sidenav
+echo '</div><span style="font-size:30px;cursor:pointer" onclick="fun_openNav()">&#9776;</span></div><div id="main">';
 ///
-?>
-</div>
-<span style="font-size:30px;cursor:pointer" onclick="fun_openNav()">&#9776;</span>
-<!-- END Side Navbar -->
-<?php
+/////////  END Side Navbar /////////
 ///
 //  If there are any Error codes display them here. Then clear the error code.
 if ( isset($_SESSION["str_error_code"]) ) {
-	echo $_SESSION["str_error_code"] ;
+	echo '<h3 style="color: red">' . $_SESSION["str_error_code"]  .'</h3>';
 	unset($_SESSION["str_error_code"]) ;
 }
 ///
 //  If there are any session mesaages display them here.
 if ( isset($_SESSION["str_message"]) ) {
-	echo $_SESSION["str_message"] ;
+	echo '<h3 style="color: white">' . $_SESSION["str_message"] .'</h3>';
 	unset($_SESSION["str_message"]) ;
 }
 ///
-//  Load the requested page or defailt to the home page.
+//  Load the requested page or default to the home page.
 //    This method will pull in the code need for diffrent pages
 //    insted of loading a whole new page and having repetitive code.
 if ( isset($_POST["var_page"]) ) {
-	require($_POST["var_page"] . ".php");
+	require(".pages/" . $_POST["var_page"] . ".php");
 	unset($_POST["var_page"]);
 }else{
-	require("home.php");
+	require(".pages/home.php");
 }
 ///
+// Load Footer
+require(".pages/footer.php")
+///
+// END Main INDEX Page ///
+////////////////////////////////////////////////////////////////
 ?>
-</body>
-</html> 

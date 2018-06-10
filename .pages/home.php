@@ -2,7 +2,6 @@
 ///
 // START Home Page Content //
 echo '
-<style> @import "/styles/home.css"; </style>
 <div class="homepage-container">
   <div class="header"><h1 class="header" align="center">Welcome to DC XP Tracker!</h1></div>
   	<div class="content">
@@ -12,7 +11,7 @@ echo '
 			<p> Example: The cash pool is $500 . Bob earns 25XP points, James 25XP, and Sally earns 50XP. So Bob gets $125, James $125 and Sally $250. </p>
 			<p>Remeber, XP can both be gained and lost!</p>
 		</div>
-	<div class="footer" align="center">More Points More Cash!</div>
 </div>';
 // END Home Page Content //
+//
 ?>

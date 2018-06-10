@@ -1,8 +1,12 @@
 <?php
+////////////////////////////////////////////////
 ///
+// Start Sessions //
 session_start();
-error_reporting(E_ALL);
-ini_set("display_errors", true);
+///
+// Below used for testing
+// error_reporting(E_ALL);
+//ini_set("display_errors", true);
 ///
 // START LOGIN-FORM Funtion Code //
 function fun_login_form() {
@@ -15,7 +19,7 @@ function fun_login_form() {
 				<input type="password" name="str_password" placeholder="Password" required autocomplete="off" /><br>		
 			</td></tr>
 		</table>
-		<input type="submit" value="Submit" />
+		<input type="submit" value="Login" />
 	</form>
 	' ;
 }
@@ -82,6 +86,6 @@ if ( isset($_POST["bln_login"]) ) {
 		}
 	}
 }
-// END LOGIN Code // !empty(
+// END LOGIN Code //
 ///
-
+////////////////////////////////////////////////
