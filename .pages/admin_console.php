@@ -8,11 +8,12 @@ session_start();
 error_reporting(E_ALL);
 ini_set("display_errors", true);
 ///////////////////
-// Check if the User has Admin Rights. If not kick them back to the Home page.
-if (!$_SESSION["bln_admin"]) {
-		$_SESSION["str_error_code"] = "Restricted Area!";
-			header("location: /");
-}
+//  Import Global Funtions.
+require($_SERVER["DOCUMENT_ROOT"].".functions/.global.functions.php");
+///
+//  Confirm the User has Admin Rights.
+fun_check_admin_rights();
+///
 ///////////////////
 /// START Admin-Sub-Navbar-FORM Funtion Code ///
 function fun_admin_navbar() {
@@ -92,7 +93,7 @@ function fun_admin_user_control_form() {
         <td><form action="/.functions/.admin_user_controls" method="post" enctype="multipart/form-data" name="admin_submit_new_user_form">
         	<input name="str_new_username" type="text" placeholder="New Username" maxlength="15" required />
             <br /><input name="str_new_users_email" type="text" placeholder="Users Email Address" maxlength="128" required />
-            <br /><label>Admin Rights</label><input name="Admin Rights?" type="checkbox" value="admin_rights" />
+            <br /><label>Admin Rights</label><input name="bln_admin_rights" type="checkbox" value="True" />
             <br /><br /><input name="admin_submit_add_user" type="submit" value="Add User" />
         </form></td>
         </tr>
@@ -134,7 +135,7 @@ function fun_admin_other_setting_form() {
 /// END Admin-Other-Setting-FORM Funtion Code ///
 //
 ///////////////////
-// START Page Content //
+// START ACTUAL Page Content //
 /// Add DIV wraper for style and content layout controls.
 echo '<div class="homepage-container">';
 // Input this pages sub-navbar
@@ -162,12 +163,11 @@ switch ($_POST["var_admin_page"]) {
 		fun_admin_jobs_form();
 		break;
 	case "admin_other_setting_page":
-		echo fun_admin_other_setting_form();
+		fun_admin_other_setting_form();
 		break;
 	default:
 		fun_admin_review_tickets_form();
 }
-
 ///
 echo '</div></div>'; /// END of the div class="content"
 ///

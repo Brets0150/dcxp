@@ -1,13 +1,17 @@
 <?php
 ////////////////////////////////////////////////
+// START User Login controls and Functions //
 ///
-// Start Sessions //
 session_start();
-///
+///////////////////
 // Below used for testing
-// error_reporting(E_ALL);
-//ini_set("display_errors", true);
+error_reporting(E_ALL);
+ini_set("display_errors", true);
+///////////////////
+//  Import Global Funtions.
+require($_SERVER["DOCUMENT_ROOT"].".functions/.global.functions.php");
 ///
+///////////////////
 // START LOGIN-FORM Funtion Code //
 function fun_login_form() {
 	echo '
@@ -36,7 +40,7 @@ if ( isset($_POST["bln_logout"]) ) {
 // END LOGOUT Code //
 ///
 // START LOGIN Code //
-// Check if logout request given.
+// Check if login request given.
 if ( isset($_POST["bln_login"]) ) {
 	// Import required files to run and start the seasion.
 	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
@@ -44,26 +48,15 @@ if ( isset($_POST["bln_login"]) ) {
 	// Check if Username and Password were given. If not return to Login page with error code.
 	if ( (isset($_POST["str_username"])) && (isset($_POST["str_password"])) ) {
 		// Username given. Securly clean and check the data.
-		$str_username = trim($_POST['str_username']);
-		$str_username = strip_tags($str_username);
-		$str_username = htmlspecialchars($str_username);
-		//
-		// Password given. Securly clean and check the data.
-		$str_password = trim($_POST['str_password']);
-		$str_password = strip_tags($str_password);
-		$str_password = htmlspecialchars($str_password);
-		//
-		// Encode Username and Password string Data to an escaped SQL string.
-		$str_username = mysqli_real_escape_string($str_dbConnect,$str_username);
-		$str_password = mysqli_real_escape_string($str_dbConnect,$str_password);
-		//
+		$str_username = fun_clean_input_data($_POST['str_username']);
+		$str_password = fun_clean_input_data($_POST['str_password']);
 		//  Convert password to MD5 Hash
 		$str_password = md5($str_password);
 		//
 		// Connect to the database and look up if a Username and password match the provided credentials.
 		$str_sql = "SELECT `user_id` FROM `user_data` WHERE `username` = '$str_username' AND `md5_password` = '$str_password' AND `account_active` = 1";
-      	$str_result = mysqli_query($str_dbConnect,$str_sql);
-      	$ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC);
+		$str_result = mysqli_query($str_dbConnect,$str_sql);
+		$ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC);
 		$int_count = mysqli_num_rows($str_result);
 		//
 		// If more one row was found then an account matching the Username, Password and is Active was found.
@@ -78,14 +71,15 @@ if ( isset($_POST["bln_login"]) ) {
 			$_SESSION["str_username"] = $str_username;
 			$_SESSION["bln_admin"] = $ary_row['admin_rights'] ;
 			$_SESSION["str_email_addr"] = $ary_row['user_email'];
-			$_SESSION["str_message"] = "Hello " . $_SESSION["str_username"] . ". Welcome Back!" ;
-			header("location: /");
+			fun_message_redirect("", "Hello ".$_SESSION["str_username"].". Welcome Back!");
 		} else {
-			$_SESSION["str_error_code"] = "Login Failed. Maybe wrong Username, Password, or account disabled?";
-			header("location: /");
+			fun_error("", "Login Failed. Maybe wrong Username, Password, or account disabled?");
 		}
 	}
 }
 // END LOGIN Code //
 ///
-////////////////////////////////////////////////
+///
+// END User Login controls and Functions //
+////////////////////////////////////////////////////////////////
+?>

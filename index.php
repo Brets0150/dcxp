@@ -19,7 +19,7 @@ if (isset($_SESSION["str_username"])) {
 	<u>User:&nbsp;&nbsp;'.$_SESSION["str_username"].'</u></h1>';
 	echo '<form action="/" method="post" enctype="multipart/form-data" name="xpr_form"><input name="var_page" type="hidden" value="xp_request" /><input type="submit" value="XP Request" /></form>';
 	echo '<form action="/" method="post" enctype="multipart/form-data" name="xps_form"><input name="var_page" type="hidden" value="xp_score_board" /><input type="submit" value="Score Board" /></form>';
-	// If admin status show admin_control link.
+	// If the logged in User has admin status show admin_control link.
 	if ($_SESSION["bln_admin"]) {
 		echo '<form action="/" method="post" enctype="multipart/form-data" name="adc_form"><input name="var_page" type="hidden" value="admin_console" /><input type="submit" value="Admin Control" /></form>';
 	}
@@ -52,10 +52,18 @@ if ( isset($_SESSION["str_message"]) ) {
 //  Load the requested page or default to the home page.
 //    This method will pull in the code need for diffrent pages
 //    insted of loading a whole new page and having repetitive code.
-if ( isset($_POST["var_page"]) ) {
+if ( (isset($_POST["var_page"])) && (!empty($_POST["var_page"])) ) {
+	// If a "posted" page request given then load that page.
 	require(".pages/" . $_POST["var_page"] . ".php");
 	unset($_POST["var_page"]);
-}else{
+//
+} elseif ( (isset($_SESSION["var_page"])) && (!empty($_SESSION["var_page"])) ) {
+	// If PHP  page request given then load that page.
+	require(".pages/" . $_SESSION["var_page"] . ".php");
+	unset($_SESSION["var_page"]);
+//
+} else {
+	// If nither are set load the home page.
 	require(".pages/home.php");
 }
 ///
