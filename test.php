@@ -44,18 +44,76 @@
     	</div>
     </div>
   	<div class="content">
+   <!--
 <table border="0" cellpadding="10" align="center">
   <tr><td align="center">
     <label >Add New Job</label>
    </td></tr>
   <tr><td>
     <form action="/.functions/.jobs_controler" method="post" enctype="multipart/form-data" name="submit_new_job_form" >
-        <p><input name="str_job_name" type="text" maxlength="127" placeholder="New Job Name" /></p>
+        <p><input autofocus="autofocus" tabindex="0" name="str_job_name" type="text" maxlength="127" placeholder="New Job Name" /></p>
         <p><textarea name="str_job_description" cols="50" rows="15" placeholder="New Job Description"></textarea></p>
         <p><label>XP Value</label>
         <input name="int_xp_value" type="text" size="8" maxlength="8" /><br />
         <input name="var_page" type="hidden" value="admin_console" /></p>
 		<input name="admin_submit_new_job" type="submit" value="Submit" /
+    </form>
+    </td></tr>
+</table>
+--->
+
+<table border="0" cellpadding="10" align="center">
+  <tr><td align="center">
+    <label >Request XP</label>
+   </td></tr>
+  <tr><td>
+    <form action="/.functions/.xp_request" method="post" enctype="multipart/form-data" name="submit_xp_request_form" >
+<?php
+
+echo '<script>
+function fun_pull_job_info(str_job_name) {
+    if (str_job_name == "") {
+        document.getElementById("str_job_info").innerHTML = "";
+        return;
+    } else { 
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else { // Browser older. I should not even support this.
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("str_job_info").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET",".functions/.xp_request?int_job_info="+str_job_name,true);
+        xmlhttp.send();
+    }
+}
+</script>';
+
+echo'<select name="ary_jobs_list" onchange="fun_pull_job_info(this.value)">
+<option value="">Select a Job</option>';
+// Connect to the database build a select box with all active jobs.
+require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
+$str_sql = "SELECT `job_name`, `job_id` FROM `jobs` WHERE `job_active` = 1 ";
+$str_result = mysqli_query($str_dbConnect,$str_sql);
+// While there are rows in of retreaved username data, echo data into the selcet box.
+while($ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC)) {
+	echo '<option value="' . $ary_row['job_id'] .'">' . $ary_row['job_name'] . '</option>';
+}
+echo '</select><br />';
+?>    
+        <input name="var_page" type="hidden" value="admin_console" />
+        <p><input autofocus="autofocus" tabindex="0" name="int_ticket_number" type="text" maxlength="127" placeholder="Ticket Number" /></p>
+        <p><label>Bonus XP Request Value</label><br />
+        <input name="int_bonus_xp_request_value" type="text" size="8" maxlength="8" /></p>        
+        <p><textarea name="str_bonus_request_reason" cols="30" rows="5" placeholder="Bonus Request Reason"></textarea></p>
+        <input name="user_submit_xp_request" type="submit" value="Submit" />        
+        <div id="str_job_info"><b>Job Description...</b></div>
+        
     </form>
     </td></tr>
 </table>

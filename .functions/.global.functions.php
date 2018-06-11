@@ -31,6 +31,19 @@ function fun_check_admin_rights() {
 // END Check For Admin Rights Funtion Code ///
 //
 ///////////////////
+/// START Check For USER Rights Funtion Code ///
+// Check if the User logged in. If not kick them back to the Home page.
+function fun_check_user_rights() {
+	if ( !$_SESSION["str_username"] ) {
+		$_SESSION["str_error_code"] = "Please login to view this page.";
+		header("location: /");
+		exit;
+	}
+}
+///
+// END Check For USER Rights Funtion Code ///
+//
+///////////////////
 /// START Error Code Return and Redirect Funtion Code ///
 // If there is an error, return the users to a page and present the error code.
 function fun_error($var_page, $str_error_code) {
