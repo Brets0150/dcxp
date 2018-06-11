@@ -71,5 +71,8 @@ function fun_clean_input_data($str_data_to_be_cleaned) {
 }
 ///
 // END User Input Data Sanitization Funtion Code ///
-//				
+//
+///
+// END Global Functions //
+////////////////////////////////////////////////////////////////
 ?>

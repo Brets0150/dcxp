@@ -63,41 +63,69 @@ function fun_admin_navbar() {
 function fun_admin_user_control_form() {
 	// Import required files to run and start the seasion.
 	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
-	// Echo out the first part of the form.
- 	echo ' <table border="1" cellpadding="1">
-        <tr>
-        	<td><label>Disable a User</label></td>
+	///
+	// START Echo out the DISABLE Users form.
+ 	echo '<table cellpadding="5" style="display: inline;" class="column" align="center">
+        <tr><td><label>Disable a User Account</label></td>
         </tr>
         <tr>
         <td><form action="/.functions/.admin_user_controls" method="post" enctype="multipart/form-data" name="admin_disable_user_form">
             <select name="ary_user_list">';
 	// The echo stoped at the "Select form, so a databaser call can be made to build the select box the all the "username"s and "user_id"s.	
 	// Connect to the database and look up if a Username and password match the provided credentials.
-	$str_sql = "SELECT `user_id`, `username` FROM `user_data`";
+	$str_sql = "SELECT `username` FROM `user_data` WHERE `account_active`=1";
 	$str_result = mysqli_query($str_dbConnect,$str_sql);
 	// While there are rows in of retreaved username data, echo data into the selcet box.
 	while($ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC)) {
-		echo '<option value="' . $ary_row['user_id'] .'">' . $ary_row['username'] . '</option>';
+		echo '<option value="' . $ary_row['username'] .'">' . $ary_row['username'] . '</option>';
 	}
 	// All users added to select box. Finish echoing the form out.
 	echo '</select>
             <br /><input name="admin_submit_disable_user" type="submit" value="Disable User" />
         </form></td>
         </tr>
-	</table>
- 	<table border="1" cellpadding="1">
+	</table>' ;
+	// END Echo out the DISABLE Users form.
+	///
+	// START Echo out the ENABLE Users form.
+ 	echo ' <table cellpadding="5" style="display: inline;" class="column" align="center">
+        <tr><td><label>Enable a User Account</label></td>
+        </tr>
+        <tr>
+        <td><form action="/.functions/.admin_user_controls" method="post" enctype="multipart/form-data" name="admin_enable_user_form">
+            <select name="ary_user_list">';
+	// The echo stoped at the "Select form, so a databaser call can be made to build the select box the all the "username"s and "user_id"s.	
+	// Connect to the database and look up if a Username and password match the provided credentials.
+	$str_sql = "SELECT `username` FROM `user_data` WHERE `account_active`=0";
+	$str_result = mysqli_query($str_dbConnect,$str_sql);
+	// While there are rows in of retreaved username data, echo data into the selcet box.
+	while($ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC)) {
+		echo '<option value="' . $ary_row['username'] .'">' . $ary_row['username'] . '</option>';
+	}
+	// All users added to select box. Finish echoing the form out.
+	echo '</select>
+            <br /><input name="admin_submit_enable_user" type="submit" value="Enable User" />
+        </form></td>
+        </tr>
+	</table>' ;
+	// END Echo out the ENABLE Users form.
+	///
+	// START Echo out the ADD NEW Users form.
+ 	echo '<table cellpadding="5" style="display: inline;" class="column" align="center">
         <tr>
         	<td><label>Add a New User</label></td>
         </tr>
         <tr>
         <td><form action="/.functions/.admin_user_controls" method="post" enctype="multipart/form-data" name="admin_submit_new_user_form">
         	<input name="str_new_username" type="text" placeholder="New Username" maxlength="15" required />
-            <br /><input name="str_new_users_email" type="text" placeholder="Users Email Address" maxlength="128" required />
+            <br /><input name="str_new_users_email" type="text" placeholder="New Users Email Address" maxlength="128" required />
             <br /><label>Admin Rights</label><input name="bln_admin_rights" type="checkbox" value="True" />
             <br /><br /><input name="admin_submit_add_user" type="submit" value="Add User" />
         </form></td>
         </tr>
 	</table>';
+	// END Echo out the ADD NEW Users form.
+	//
 }
 ///
 /// END Admin-User-Control-FORM Funtion Code ///
@@ -121,7 +149,21 @@ function fun_admin_cash_pool_form() {
 ///////////////////
 /// START Admin-JOBS-FORM Funtion Code ///
 function fun_admin_jobs_form() {
-	echo "admin_jobs_form";
+	echo '<table border="0" cellpadding="10" align="center">
+  <tr><td>
+    <label >Add New Job</label>
+   </td></tr>
+  <tr><td>
+    <form action="/.functions/.jobs_controler" method="post" enctype="multipart/form-data" name="submit_new_job_form" >
+        <p><input name="str_job_name" type="text" maxlength="127" placeholder="New Job Name" /></p>
+        <p><textarea name="str_job_description" cols="50" rows="15" placeholder="New Job Description"></textarea></p>
+        <p><label>XP Value</label>
+        <input name="int_xp_value" type="text" size="8" maxlength="8" /><br />
+        <input name="var_page" type="hidden" value="admin_console" /></p>
+		<input name="admin_submit_new_job" type="submit" value="Submit" /
+    </form>
+    </td></tr>
+</table>';
 }
 ///
 /// END Admin-JOBS-FORM Funtion Code ///
