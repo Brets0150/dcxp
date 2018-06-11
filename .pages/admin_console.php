@@ -154,13 +154,12 @@ function fun_admin_jobs_form() {
     <label >Add New Job</label>
    </td></tr>
   <tr><td>
-    <form action="/.functions/.jobs_controler" method="post" enctype="multipart/form-data" name="submit_new_job_form" >
-        <p><input name="str_job_name" type="text" maxlength="127" placeholder="New Job Name" /></p>
-        <p><textarea name="str_job_description" cols="50" rows="15" placeholder="New Job Description"></textarea></p>
+    <form action="/.functions/.jobs_controller" method="post" enctype="multipart/form-data" name="submit_new_job_form" >
+        <p><input autofocus="autofocus" tabindex="1" name="str_job_name" type="text" maxlength="127" placeholder="New Job Name" required /></p>
+        <p><textarea  tabindex="2" name="str_job_description" cols="50" rows="15" placeholder="New Job Description" required></textarea></p>
         <p><label>XP Value</label>
-        <input name="int_xp_value" type="text" size="8" maxlength="8" /><br />
-        <input name="var_page" type="hidden" value="admin_console" /></p>
-		<input name="admin_submit_new_job" type="submit" value="Submit" /
+        <input tabindex="3" name="int_xp_value" type="text" size="8" maxlength="8" required /><br />
+		<input tabindex="4" name="admin_submit_new_job" type="submit" value="Submit" />
     </form>
     </td></tr>
 </table>';

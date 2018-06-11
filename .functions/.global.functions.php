@@ -60,17 +60,47 @@ function fun_message_redirect($var_page, $str_message) {
 function fun_clean_input_data($str_data_to_be_cleaned) {
 	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
 	// Remove extra tailing and leading spaces from the string.
-	$str_data_to_be_cleanede = trim($str_data_to_be_cleaned);
+	$str_data_to_be_cleaned = trim($str_data_to_be_cleaned);
 	// Strip NULL, HTML and PHP tags from the string
 	$str_data_to_be_cleaned = strip_tags($str_data_to_be_cleaned);
 	// Convert special characters in the string to HTML entities
 	$str_data_to_be_cleaned = htmlspecialchars($str_data_to_be_cleaned);
 	// Encode Username and Password string Data to an escaped SQL string.
-	$str_data_to_be_cleaned = mysqli_real_escape_string($str_dbConnect,$str_data_to_be_cleaned);
+	$str_data_to_be_cleaned = mysqli_real_escape_string($str_dbConnect, $str_data_to_be_cleaned);
 	return $str_data_to_be_cleaned;
 }
 ///
 // END User Input Data Sanitization Funtion Code ///
+//
+///////////////////
+/// START Check if a Value Exist in the DataBase Funtion Code ///
+function fun_check_db_for_existing_values($str_sql) {
+	// Connect to the database and check if the provided SQL query retunrs records.
+	//   If more than "0" records are found then it exists in the Database.
+	///
+	// Example for "$str_sql"
+	// $str_sql = "SELECT `job_id` FROM `jobs` WHERE `job_name` = '$str_job_name'";
+	///
+	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
+	$str_result = mysqli_query($str_dbConnect,$str_sql);
+	$ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC);
+	$int_count = mysqli_num_rows($str_result);
+	settype($int_count, "integer");
+	// If "1" or more records found then the data exists in the Database.
+	if ( $int_count > 0 ) {
+		$bln_data_not_in_db_good = true;
+		settype($bln_data_not_in_db_good);
+	} else { // The DB does not have a job with the same name. Good To proceed.
+		$bln_data_not_in_db_good = false;
+		settype($bln_data_not_in_db_good, "bool");
+	}
+	// Clean the Mysql variable to make sure the new ones will be clean
+	unset($str_sql, $str_result, $ary_row, $int_count);
+	// return the results of the check.
+	return($bln_data_not_in_db_good);
+}
+///
+// END Check if a Value Exist in the DataBase Funtion Code ///
 //
 ///
 // END Global Functions //

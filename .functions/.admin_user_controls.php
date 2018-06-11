@@ -132,7 +132,7 @@ if ( isset($_POST['admin_submit_add_user']) ) {
 				$str_sql = "INSERT INTO `user_data`(`username`, `md5_password`, `user_email`, `admin_rights`, `account_active`)
 				VALUES ('$str_new_username','$str_new_users_password_md5','$str_new_users_email','$bln_admin_rights','$bln_account_active')";
 				///
-				// Copnnect to the DB and INSERT the new user record.
+				// Connect to the DB and INSERT the new user record.
 				if ( !mysqli_query($str_dbConnect,$str_sql) ) {
 					unset($str_sql, $str_result, $ary_row, $int_count);
 					mysqli_close($str_dbConnect);
