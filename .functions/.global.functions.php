@@ -87,15 +87,15 @@ function fun_clean_input_data($str_data_to_be_cleaned) {
 //
 ///////////////////
 /// START Check if a Value Exist in the DataBase Funtion Code ///
-function fun_check_db_for_existing_values($str_sql) {
+function fun_check_db_for_existing_values($str_tmp_sql) {
 	// Connect to the database and check if the provided SQL query retunrs records.
 	//   If more than "0" records are found then it exists in the Database.
 	///
-	// Example for "$str_sql"
-	// $str_sql = "SELECT `job_id` FROM `jobs` WHERE `job_name` = '$str_job_name'";
+	// Example for "$str_tmp_sql"
+	// $str_tmp_sql = "SELECT `job_id` FROM `jobs` WHERE `job_name` = '$str_job_name'";
 	///
 	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
-	$str_result = mysqli_query($str_dbConnect,$str_sql);
+	$str_result = mysqli_query($str_dbConnect,$str_tmp_sql);
 	$ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC);
 	$int_count = mysqli_num_rows($str_result);
 	settype($int_count, "integer");
@@ -108,12 +108,32 @@ function fun_check_db_for_existing_values($str_sql) {
 		settype($bln_data_not_in_db_good, "bool");
 	}
 	// Clean the Mysql variable to make sure the new ones will be clean
-	unset($str_sql, $str_result, $ary_row, $int_count);
+	unset($str_tmp_sql, $str_result, $ary_row, $int_count);
 	// return the results of the check.
 	return($bln_data_not_in_db_good);
 }
 ///
 // END Check if a Value Exist in the DataBase Funtion Code ///
+//
+///////////////////
+/// START Template Funtion Code ///
+// Template Discription
+function fun_get_one_varabile_from_db($str_tmp_sql, $var_column_to_return) {
+	// Connect to the database pull one column and one row of data
+	///
+	// Example for "$var_column_to_retur" would be `job_xp_value`
+	///
+	// Example for "$str_tmp_sql"
+	// $str_tmp_sql = "SELECT `job_id` FROM `jobs` WHERE `job_name` = '$str_job_name'";
+	///
+	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
+	$str_result = mysqli_query($str_dbConnect,$str_tmp_sql);
+	$ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC);
+	// return the results of the check.
+	return($ary_row[$var_column_to_return]);
+}
+///
+// END Template Funtion Code ///
 //
 ///
 // END Global Functions //

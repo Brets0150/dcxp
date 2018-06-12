@@ -5,6 +5,11 @@
 // Import Header
 require(".pages/header.php");
 ///
+// The next two lines are to fix the browsers "back" request from having a cache error.
+header('Cache-Control: no cache'); //no cache
+session_cache_limiter('private_no_expire'); // works
+// Start Session
+session_start();
 ///////// START Side Navbar /////////
 //  Start with top of the side Navbar, style "div.sidenav".
 echo'<div id="Sidenav" class="sidenav">

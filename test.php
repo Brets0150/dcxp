@@ -105,15 +105,15 @@ while($ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC)) {
 	echo '<option value="' . $ary_row['job_id'] .'">' . $ary_row['job_name'] . '</option>';
 }
 echo '</select><br />';
-?>    
+?>
+
         <input name="var_page" type="hidden" value="admin_console" />
         <p><input autofocus="autofocus" tabindex="0" name="int_ticket_number" type="text" maxlength="127" placeholder="Ticket Number" /></p>
         <p><label>Bonus XP Request Value</label><br />
         <input name="int_bonus_xp_request_value" type="text" size="8" maxlength="8" /></p>        
         <p><textarea name="str_bonus_request_reason" cols="30" rows="5" placeholder="Bonus Request Reason"></textarea></p>
         <input name="user_submit_xp_request" type="submit" value="Submit" />        
-        <div id="str_job_info"><b>Job Description...</b></div>
-        
+        <div id="str_job_info" class="content"><b>Job Description...</b></div>
     </form>
     </td></tr>
 </table>
@@ -121,8 +121,6 @@ echo '</select><br />';
 
 
 	</div>
-
-
 <div class="footer" align="center">DC XP Tracker &copy; <a href="https://BretStaton.com"  style="color:white;">Bret Staton</a></div>
 </div>
 
