@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", true);
 ///////////////////
 //  Import Global Funtions.
-require($_SERVER["DOCUMENT_ROOT"].".functions/.global.functions.php");
+require_once($_SERVER["DOCUMENT_ROOT"].".functions/.global.functions.php");
 ///
 //  Confirm the User has Admin Rights.
 fun_check_admin_rights();
@@ -19,7 +19,7 @@ fun_check_admin_rights();
 function fun_admin_navbar() {
 	echo '
 	<div class="header"><h1 class="header" align="center">Admin Console</h1></div>
-	   <div class="header">
+	   <div class="sub-header">
 			<div class="sub-navbar" align="center">
 			<!-- Sub-Navbar button to load user_contols form -->
 				<form action="/" method="post" enctype="multipart/form-data" name="open_admin_user_control_form">
@@ -133,7 +133,58 @@ function fun_admin_user_control_form() {
 ///////////////////
 /// START Admin-Review-Tickets-FORM Funtion Code ///
 function fun_admin_review_tickets_form() {
-	echo "admin_review_tickets_form";
+	// echo JS function the page needs to control the DIV boxes.
+	echo '
+		<script>
+		function fun_expand_tab(str_tab_name) {
+			var i, x;
+			x = document.getElementsByClassName("container-tab");
+			for (i = 0; i < x.length; i++) {
+				x[i].style.display = "none";
+			}
+			document.getElementById(str_tab_name).style.display = "block";
+		}
+		</script>
+	';
+	$str_sql = "SELECT `xp_id`, `user_id`, `job_id`, `ticket_number`, `date_submitted`, `requested_xp`, `bonus_xp`, `bonus_reason` FROM `xp_data` WHERE `reviewed_status` = false";
+	$int_row_count = 0;
+	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
+	$str_result = mysqli_query($str_dbConnect,$str_sql);
+	while ( $ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC) ) {
+		$int_row_count += 1; // Used to count the numeber of row, and used to alternate the colors of the DIV table.
+		if ($int_row_count % 2 == 0) { // Check if the numebr is odd or even
+			// Even# == TRUE
+			$str_color_number = "1755B2";
+		} else {
+			// Even#(odd#) == FALSE
+			$str_color_number = "57677f";
+		}
+		$str_sql2      = "SELECT `username` FROM `user_data` WHERE `user_id` = ". $ary_row['user_id'] ;
+		$str_username = fun_get_one_varabile_from_db($str_sql2, 'username');
+		$str_sql2      = "SELECT `job_name` FROM `jobs` WHERE `job_id` = ".$ary_row['job_id'] ;
+		$str_job_name = fun_get_one_varabile_from_db($str_sql2, 'job_name');
+
+		// $ary_row['']
+		echo '<div class="row">
+		<div class="column" onclick="fun_expand_tab(' . $ary_row['xp_id'] .');" style="background:#' . $str_color_number. ';">
+			<table border="0" cellpadding="10">
+			<tr><td>'. $str_username              . '</td>
+				<td>'. $ary_row['ticket_number']  . '</td>
+				<td>'. $str_job_name              .'</td>
+				<td>'. $ary_row['date_submitted'] .'</td></tr>
+			</table>
+	 	</div>
+		
+		<div id="' . $ary_row['xp_id'] .'" class="container-tab" style="display:none;background:#' . $str_color_number. '">
+			<span style="text-align:left" onclick="this.parentElement.style.display=' . "'none'" . '" class="row-closebtn">&times;</span><br /><br />
+			<form action="/.functions/.test" method="post" enctype="multipart/form-data" name="submit_xp_review_form">
+				<input name="xp_id" type="hidden" value="'.$ary_row['xp_id'].'" />
+				<textarea name="str_admin_feedback" cols="" rows=""></textarea>
+			</form>
+		</div>
+		';
+	}
+	
 }
 ///
 /// END Admin-Review-Tickets-FORM Funtion Code ///

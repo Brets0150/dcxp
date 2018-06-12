@@ -60,7 +60,7 @@
     </form>
     </td></tr>
 </table>
---->
+
 
 <table border="0" cellpadding="10" align="center">
   <tr><td align="center">
@@ -68,7 +68,7 @@
    </td></tr>
   <tr><td>
     <form action="/.functions/.xp_request" method="post" enctype="multipart/form-data" name="submit_xp_request_form" >
-<?php
+
 
 echo '<script>
 function fun_pull_job_info(str_job_name) {
@@ -106,7 +106,6 @@ while($ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC)) {
 }
 echo '</select><br />';
 ?>
-
         <input name="var_page" type="hidden" value="admin_console" />
         <p><input autofocus="autofocus" tabindex="0" name="int_ticket_number" type="text" maxlength="127" placeholder="Ticket Number" /></p>
         <p><label>Bonus XP Request Value</label><br />
@@ -117,7 +116,90 @@ echo '</select><br />';
     </form>
     </td></tr>
 </table>
+--->
+<style>
+* {
+    box-sizing: border-box;
+}
 
+body {
+    margin: 0;
+    font-family: Arial;
+}
+
+/* The grid: Three equal columns that floats next to each other */
+.column {
+    float: center;
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    font-size: 15px;
+    cursor: pointer;
+    color: white;
+}
+
+.container-tab {
+    padding: 10px;
+    color: white;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Closable button inside the container tab */
+.closebtn {
+    float: left;
+    color: white;
+    font-size: 35px;
+    cursor: pointer;
+}
+</style>
+<!-- 
+$str_sql = "SELECT `xp_id`, `user_id`, `job_id`, `ticket_number`, `date_submitted`, `requested_xp`, `bonus_xp`, `bonus_reason` FROM `xp_data` WHERE `reviewed_status` = false";
+
+-->
+
+<div class="row">
+  <div class="column" onclick="fun_expand_tab('b1');" style="background:green;">
+    Box 1
+  </div>
+  <div id="b1" class="container-tab" style="display:none;background:green">
+  <span style="text-align:left" onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+  <h2>Box 1</h2>
+  <p>Lorem ipsum dolor sit amet, te quo doctus abhorreant, et pri deleniti intellegat, te sanctus inermis ullamcorper nam. Ius error diceret deseruisse ad</p>
+</div>
+  
+  
+  <div class="column" onclick="fun_expand_tab('b2');" style="background:blue;">
+    Box 2
+  </div>
+  
+<div id="b2" class="container-tab" style="display:none;background:blue">
+  <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+  <h2>Box 2</h2>
+  <p>Lorem ipsum dolor sit amet, te quo doctus abhorreant, et pri deleniti intellegat, te sanctus inermis ullamcorper nam. Ius error diceret deseruisse ad</p>
+</div>
+
+<!-- Full-width columns: (hidden by default) -->
+
+
+
+
+
+<script>
+function fun_expand_tab(str_tab_name) {
+  var i, x;
+  x = document.getElementsByClassName("container-tab");
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+  }
+  document.getElementById(str_tab_name).style.display = "block";
+}
+</script>
 
 
 	</div>

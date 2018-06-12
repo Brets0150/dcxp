@@ -116,8 +116,8 @@ function fun_check_db_for_existing_values($str_tmp_sql) {
 // END Check if a Value Exist in the DataBase Funtion Code ///
 //
 ///////////////////
-/// START Template Funtion Code ///
-// Template Discription
+// START Get a single variable from the Database Funtion, ONE variable, NOT an ARRAY! ///
+///
 function fun_get_one_varabile_from_db($str_tmp_sql, $var_column_to_return) {
 	// Connect to the database pull one column and one row of data
 	///
@@ -133,7 +133,25 @@ function fun_get_one_varabile_from_db($str_tmp_sql, $var_column_to_return) {
 	return($ary_row[$var_column_to_return]);
 }
 ///
-// END Template Funtion Code ///
+// END Get a single variable from the Database Funtion ///
+//
+///////////////////
+// START Get ARRAY variable from the Database Funtion ///
+///
+function fun_array_varabile_from_db($str_tmp_sql) {
+	// Connect to the database pull one column and one row of data
+	///
+	// Example for "$str_tmp_sql"
+	// $str_tmp_sql = "SELECT `job_id` FROM `jobs` WHERE `job_name` = '$str_job_name'";
+	///
+	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
+	$str_result = mysqli_query($str_dbConnect,$str_tmp_sql);
+	$ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC);
+	// return the results of the check.
+	return($ary_row);
+}
+///
+// END Get a Get ARRAY variable from the Database Funtion ///
 //
 ///
 // END Global Functions //

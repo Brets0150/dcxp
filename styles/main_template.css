@@ -1,8 +1,12 @@
-/* START CSS Document */
+/* START CSS Document 
+EEF1FF
+57677f
+1755B2
+*/
 
 body {
 	font-family: "Lato", sans-serif;
-	background-color: #57677f;
+	background-color: #EEF1FF;
 }
 td,th {
 	background-color: #;
@@ -83,21 +87,35 @@ div.homepage-container {
 }
 
 div.content {
+	background-color:#57677f;
     margin-left: auto;
-    padding: 20px;
+    padding: 10px;
     overflow: hidden;
-    max-width:750px;
+    max-width:770px;
     margin-left: auto;
     margin-right: auto;
 	alignment-adjust:auto;
 	color:white;
+	border-bottom-left-radius:15px;
+	border-bottom-right-radius:15px;
 }
 
 div.header {
-    padding: 10px;
+	border-top-left-radius:15px;
+	border-top-right-radius:15px;
+    padding: 20px;
     color: white;
     background-color: #172EB2;
     max-width:750px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.sub-header {
+    padding: 0px;
+    color: white;
+    background-color: #172EB2;
+    max-width:790px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -111,6 +129,7 @@ div.footer {
     background-color: #172EB2;
     color: white;
     text-align: center;
+    height:10px;
 }
 
 h1.header {
@@ -162,6 +181,36 @@ div.sub-navbar input[type=submit]:hover {
 div.sub-navbar form {
     display: inline;
 }
+/*  END Admin Contols Page CSS */
 
+.column {
+    float: center;
+    width: 100%;
+    padding: 15px;
+    text-align: left;
+    font-size: 15px;
+    cursor: pointer;
+    color: white;
+}
 
+.container-tab {
+    padding: 10px;
+    color: white;
+	width:100%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Closable button inside the container tab */
+.row-closebtn {
+    float: left;
+    color: white;
+    font-size: 35px;
+    cursor: pointer;
+}
 /*  END Admin Contols Page CSS */
