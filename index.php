@@ -50,7 +50,7 @@ if ( isset($_SESSION["str_error_code"]) ) {
 ///
 //  If there are any session mesaages display them here.
 if ( isset($_SESSION["str_message"]) ) {
-	echo '<h3 style="color: white">' . $_SESSION["str_message"] .'</h3>';
+	echo '<h3 style="color: black">' . $_SESSION["str_message"] .'</h3>';
 	unset($_SESSION["str_message"]) ;
 }
 ///

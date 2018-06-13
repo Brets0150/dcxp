@@ -133,9 +133,11 @@ function fun_admin_user_control_form() {
 ///////////////////
 /// START Admin-Review-Tickets-FORM Funtion Code ///
 function fun_admin_review_tickets_form() {
+	///
 	// echo JS function the page needs to control the DIV boxes.
 	echo '
 		<script>
+		///// START Function to expand a tab ////
 		function fun_expand_tab(str_tab_name) {
 			var i, x;
 			x = document.getElementsByClassName("container-tab");
@@ -144,47 +146,113 @@ function fun_admin_review_tickets_form() {
 			}
 			document.getElementById(str_tab_name).style.display = "block";
 		}
+		///// END Function to expand a tab ////
+		///
+		///// START Function to add Base XP and Bonus XP on Button Click ////
+		///
+		function fun_add_bonus_xp(str_bonus_xp_field_id,str_base_xp_field_id) {
+			var int_bonus_xp = document.getElementById(str_bonus_xp_field_id).value;
+			var int_base_xp  = document.getElementById(str_base_xp_field_id).value;
+			var x = +int_bonus_xp + +int_base_xp;
+			document.getElementById(str_base_xp_field_id).value = x;
+			///document.getElementById(accept_button).style.display = "none";
+		}
+		///
 		</script>
 	';
-	$str_sql = "SELECT `xp_id`, `user_id`, `job_id`, `ticket_number`, `date_submitted`, `requested_xp`, `bonus_xp`, `bonus_reason` FROM `xp_data` WHERE `reviewed_status` = false";
-	$int_row_count = 0;
+	// Echo out the header/first row of the DIV-table that will follow.
+	echo '<div class="row" style="background-color:black;">
+			<div class="column" >
+				<p>UserNane</p>
+			</div>
+			
+			<div class="column" >
+				<p>Ticket Number</p>
+			</div>
+			
+			<div class="column" >
+				<p>Job Name</p>
+			</div>
+			
+			<div class="column" >
+				<p>Date Submitted</p>
+			</div>
+		</div>';
+	///
+	// Connect to the database and pull all the records of ticket/XP-Request that need to be reviewed.
+	////// !!!!!FEATURE NEEDED!!!!! Change to to limit the number of rows pulled, and create a "page" system.
 	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
+	$str_sql = "SELECT `xp_id`, `user_id`, `job_id`, `ticket_number`, `date_submitted`, `requested_xp`, `bonus_xp`, `bonus_reason` FROM `xp_data` WHERE `reviewed_status` = false";
 	$str_result = mysqli_query($str_dbConnect,$str_sql);
+	///
+	/// Start a counter. This conter is increment for each loop made in the next WHILE statment. This counter is used to alternate the colors of the rows(if odd do this, if even do this).
+	$int_row_count = 0;
+	/// 
+	// While loop takes the MySQL data returned from the "$str_sql" request and is then used to biuld the on page form/layout.
 	while ( $ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC) ) {
 		$int_row_count += 1; // Used to count the numeber of row, and used to alternate the colors of the DIV table.
 		if ($int_row_count % 2 == 0) { // Check if the numebr is odd or even
-			// Even# == TRUE
+			// Even# == TRUE. Change the ROW color.
 			$str_color_number = "1755B2";
 		} else {
-			// Even#(odd#) == FALSE
+			// Even#(odd#) == FALSE Change the ROW color.
 			$str_color_number = "57677f";
 		}
-		$str_sql2      = "SELECT `username` FROM `user_data` WHERE `user_id` = ". $ary_row['user_id'] ;
-		$str_username = fun_get_one_varabile_from_db($str_sql2, 'username');
-		$str_sql2      = "SELECT `job_name` FROM `jobs` WHERE `job_id` = ".$ary_row['job_id'] ;
-		$str_job_name = fun_get_one_varabile_from_db($str_sql2, 'job_name');
-
-		// $ary_row['']
+		///
+		// Convert the id number values from the database entrie to human readable names
+		$str_sql2                 = "SELECT `username` FROM `user_data` WHERE `user_id` = ". $ary_row['user_id'] ;
+		$str_username             = fun_get_one_varabile_from_db($str_sql2, 'username');
+		$str_sql2                 = "SELECT `job_name` FROM `jobs` WHERE `job_id` = ".$ary_row['job_id'] ;
+		$str_job_name             = fun_get_one_varabile_from_db($str_sql2, 'job_name');
+		$str_sql2                 = "SELECT `setting_value`FROM `app_settings` WHERE `setting_name` = 'ticketing_system_url' " ;
+		$str_ticketing_system_url = fun_get_one_varabile_from_db($str_sql2, 'setting_value');
+		$str_request_submit_date  = date("m-d-Y", strtotime($ary_row['date_submitted']));
+		///
+		// Start using the data to build rows on the page.
 		echo '<div class="row">
-		<div class="column" onclick="fun_expand_tab(' . $ary_row['xp_id'] .');" style="background:#' . $str_color_number. ';">
-			<table border="0" cellpadding="10">
-			<tr><td>'. $str_username              . '</td>
-				<td>'. $ary_row['ticket_number']  . '</td>
-				<td>'. $str_job_name              .'</td>
-				<td>'. $ary_row['date_submitted'] .'</td></tr>
-			</table>
-	 	</div>
-		
-		<div id="' . $ary_row['xp_id'] .'" class="container-tab" style="display:none;background:#' . $str_color_number. '">
-			<span style="text-align:left" onclick="this.parentElement.style.display=' . "'none'" . '" class="row-closebtn">&times;</span><br /><br />
-			<form action="/.functions/.test" method="post" enctype="multipart/form-data" name="submit_xp_review_form">
-				<input name="xp_id" type="hidden" value="'.$ary_row['xp_id'].'" />
-				<textarea name="str_admin_feedback" cols="" rows=""></textarea>
+		<div class="row" onclick="fun_expand_tab(' . $ary_row['xp_id'] .');" style="background:#' . $str_color_number. ';"">
+				<div class="column" >
+					<p>'. $str_username . '</p>
+				</div>
+				<div class="column" >
+					<p><a href="'.$str_ticketing_system_url.$ary_row['ticket_number']  . '" target="_blank" >' . $ary_row['ticket_number'] . '</a></p>
+				</div>
+				<div class="column" >
+					<p>'. $str_job_name .'</p>
+				</div>
+				<div class="column" >
+					<p>'. $str_request_submit_date . '</p>
+				</div>
+			</div>';
+		// END of the visable ROW
+		///
+		// START Building the hiden ROW that can be expanded.
+		echo '<div id="' . $ary_row['xp_id'] .'" class="container-tab" style="display:none;background:#' . $str_color_number. '">
+				<span style="text-align:left" onclick="this.parentElement.style.display=' . "'none'" . '" class="row-closebtn">&times;</span><br /><br />
+				<form action="/.functions/.admin_review" method="post" enctype="multipart/form-data" name="submit_xp_review_form" class="data-conlumn">';
+		///
+		// If there is a request for Extra XP add the below to the form
+		if ( $ary_row['bonus_xp'] > 0 ) {
+			echo '<p style="border-radius: 5px; border: 1px solid black; padding:5px;width:50%;" > 
+			<input id="int_bonus_value_'.$ary_row['xp_id'].'" name="int_bonus_xp_requested" type="hidden" value="'.$ary_row['bonus_xp'].'" />
+			<label>Bonus XP Reuested</label><br/>
+			<input name="bonus_xp_requested_display" type="text" value="'.$ary_row['bonus_xp'].'" size="4" maxlength="8" readonly />
+			<input name="accept_bonus_xp_request" type="button" value="Accept Bonus"
+			onclick="fun_add_bonus_xp('."'".'int_bonus_value_'.$ary_row['xp_id']."'".",'".'int_base_xp_value_'.$ary_row['xp_id']."'".'); this.style.visibility=' . "'hidden'" . '";" />
+			<br /><br />
+			' . nl2br($ary_row['bonus_reason'], true) . '</p>';
+			}
+		/// Finish Echo-ing the form out.
+		echo '<input name="xp_id" type="hidden" value="'.$ary_row['xp_id'].'" />
+				<textarea name="str_admin_feedback" id="str_admin_feedback" cols="" rows="" placeholder="Feedback on work preformance." style="width:80%;padding:5px;border-radius:5px;" ></textarea><br/>
+				<input id="int_base_xp_value_'.$ary_row['xp_id'].'"  maxlength="8" name="int_total_xp_value" type="number" size="8" value="'.$ary_row['requested_xp'].'" style="border-radius:5px;" />
+				<br /><input name="admin_submit_xp_review" type="submit" value="Accept" />
+				<input name="admin_submit_xp_review" type="submit" value="Denied" />
 			</form>
+		</div> 
 		</div>
 		';
 	}
-	
 }
 ///
 /// END Admin-Review-Tickets-FORM Funtion Code ///
@@ -192,7 +260,70 @@ function fun_admin_review_tickets_form() {
 ///////////////////
 /// START Admin-Cash_Pool-FORM Funtion Code ///
 function fun_admin_cash_pool_form() {
-	echo "admin_cash_pool_form";
+	///////////////////
+	// START SUBMIT To Cash Pool Form ///
+	//   This form will allow the Admin is submit cash to the cash pool.
+	echo '
+	<table border="0" cellpadding="10" align="center"><tr align="left"><td>
+	<form action="/.functions/.pool_controls" method="post" enctype="multipart/form-data" name="admin_submit_cash_pool">';
+	// Create a select box that auto sets to the current month.
+	echo '
+	<p><label> Cash Pool Date<label><br/>
+	<select name="int_cash_pool_month">';
+	foreach(range('1', '12') as $int_month) {
+		echo '<option value="'. $int_month . '"';
+		if ( date('n') == $int_month ) { 
+			echo 'selected="selected"'; 
+		}
+		echo '>'. $int_month . '</option>';
+	}
+	echo '</select>';
+	///
+	// Create a select box that auto sets to the current year.
+	echo '<select name="int_cash_pool_year">';
+	foreach(range('2015', '2025') as $int_year) {
+		echo '<option value="'. $int_year . '"';
+		if ( date('Y') == $int_year ) { 
+			echo 'selected="selected"'; 
+		}
+		echo '>'. $int_year . '</option>';
+	}
+	/// Finish echoiung the select box and add the number box for the $USD$ Pool value.
+	echo '</select></p>
+	<p><label>Cash Pool Amount<label><br />
+	<input name="int_usd_cash_amount" type="number" size="8" maxlength="8" placeholder="$$$$"/></p>
+	<input name="submit_cash_pool_add" type="submit" />
+	</td></tr></table>
+	</form>';
+	// Connect to the database build a select box with all active jobs.
+	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
+	$str_sql = "SELECT `cash_pool_id`, `cash_pool_month`, `cash_pool_year`, `cash_pool_value` FROM `cash_pool_table` LIMIT 25";
+	$str_result = mysqli_query($str_dbConnect,$str_sql);
+	///
+	// Echo the start of the table with the existing pool data.
+	echo '<table border="0" cellpadding="10" align="center">
+		  <tr>
+			<td>Date</td>
+			<td>$Cash Amount$</td>
+			<td>&nbsp;</td>
+		  </tr>';
+	// While there are rows in of retreaved username data, echo data into the selcet box.
+	while($ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC)) {
+		echo '	
+		  <tr>
+			<td>'.$ary_row['cash_pool_month']. '/' .$ary_row['cash_pool_year'] .'</td>
+			<td>&dollar;'.$ary_row['cash_pool_value']. '</td>
+			<td>
+			<form action="/.functions/.pool_controls" method="post" enctype="multipart/form-data" name="delete_cash_pool">
+			<input name="int_cash_pool_id" type="hidden" value="'.$ary_row['cash_pool_id'].'" />
+			<input name="submit_cash_pool_delete" type="submit" value="Delete" />
+			</form>
+			</td>
+		  </tr>';
+	}
+	echo '</table>';
+	/// 
+	// END of the SUBMIT Cash Pool.
 }
 ///
 /// END Admin-Cash_Pool-FORM Funtion Code ///

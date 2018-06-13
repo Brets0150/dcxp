@@ -1,7 +1,7 @@
-AuthType Basic
-AuthName "Enter you UserName & Password."
-AuthUserFile /etc/apache2/.secret/.htpasswd
-Require valid-user
+#AuthType Basic
+#AuthName "Enter you UserName & Password."
+#AuthUserFile /etc/apache2/.secret/.htpasswd
+#Require valid-user
 ###
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d

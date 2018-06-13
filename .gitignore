@@ -1,2 +1,4 @@
 *.sql.php
 
+test.php
+.functions/.test.php

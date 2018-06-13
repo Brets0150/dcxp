@@ -21,7 +21,7 @@ echo '<div class="header"><h1 class="header" align="center">XP Request</h1></div
 echo '<script>
 ///////////////////
 /// START Dynamic Job Description Update Function ///
-// Template Discription
+//   Facilitates pulling info the the database with changes on the form occure.
 function fun_pull_job_info(str_job_name) {
     if (str_job_name == "") {
         document.getElementById("str_job_info").innerHTML = "";

@@ -44,36 +44,109 @@
     	</div>
     </div>
   	<div class="content">
-   <!--
-<table border="0" cellpadding="10" align="center">
-  <tr><td align="center">
-    <label >Add New Job</label>
-   </td></tr>
-  <tr><td>
-    <form action="/.functions/.jobs_controler" method="post" enctype="multipart/form-data" name="submit_new_job_form" >
-        <p><input autofocus="autofocus" tabindex="0" name="str_job_name" type="text" maxlength="127" placeholder="New Job Name" /></p>
-        <p><textarea name="str_job_description" cols="50" rows="15" placeholder="New Job Description"></textarea></p>
-        <p><label>XP Value</label>
-        <input name="int_xp_value" type="text" size="8" maxlength="8" /><br />
-        <input name="var_page" type="hidden" value="admin_console" /></p>
-		<input name="admin_submit_new_job" type="submit" value="Submit" /
-    </form>
-    </td></tr>
-</table>
+<?php
+
+///////////////////
+// START SUBMIT To Cash Pool Form ///
+//   This form will allow the Admin is submit cash to the cash pool.
+echo '
+<table border="0" cellpadding="10" align="center"><tr align="left"><td>
+<form action="/.functions/.test" method="post" enctype="multipart/form-data" name="admin_submit_cash_pool">';
+// Create a select box that auto sets to the current month.
+echo '
+<p><label> Cash Pool Date<label><br/>
+<select name="int_cash_pool_month">';
+foreach(range('1', '12') as $int_month) {
+	echo '<option value="'. $int_month . '"';
+	if ( date('n') == $int_month ) { 
+		echo 'selected="selected"'; 
+	}
+	echo '>'. $int_month . '</option>';
+}
+echo '</select>';
+///
+// Create a select box that auto sets to the current year.
+echo '<select name="int_cash_pool_year">';
+foreach(range('2015', '2025') as $int_year) {
+	echo '<option value="'. $int_year . '"';
+	if ( date('Y') == $int_year ) { 
+		echo 'selected="selected"'; 
+	}
+	echo '>'. $int_year . '</option>';
+}
+echo '</select></p>
+<p><label>$$$Cash Pool Amount<label><br />
+<input name="int_usd_cash_amount" type="number" size="8" maxlength="8" placeholder="$$$$"/>
+</td></tr></table>
+</form>';
 
 
-<table border="0" cellpadding="10" align="center">
-  <tr><td align="center">
-    <label >Request XP</label>
-   </td></tr>
-  <tr><td>
-    <form action="/.functions/.xp_request" method="post" enctype="multipart/form-data" name="submit_xp_request_form" >
 
+// Connect to the database build a select box with all active jobs.
+require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
+$str_sql = "SELECT `cash_pool_id`, `cash_pool_month`, `cash_pool_year`, `cash_pool_value` FROM `cash_pool_table` LIMIT 25";
+$str_result = mysqli_query($str_dbConnect,$str_sql);
+
+echo '<table border="0" cellpadding="10">
+	  <tr>
+		<td>Date</td>
+		<td>$Cash Amount$</td>
+		<td>&nbsp;</td>
+	  </tr>';
+// While there are rows in of retreaved username data, echo data into the selcet box.
+while($ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC)) {
+	echo '	
+	  <tr>
+		<td>'.$ary_row['cash_pool_month']. '/' .$ary_row['cash_pool_year'] .'</td>
+		<td>'.$ary_row['cash_pool_value']. '</td>
+		<td>
+		<form action="" method="post" enctype="multipart/form-data" name="delete_cash_pool">
+		<input name="int_cash_pool_id" type="hidden" value="'.$ary_row['cash_pool_id'].'" />
+		<input name="submit_cash_pool_delete" type="submit" />
+		</form>
+		</td>
+	  </tr>';
+}
+echo '</table>';
+/// 
+// END of the SUBMIT Cash Pool.
+?>
+
+</div>
+<div class="footer" align="center">DC XP Tracker &copy; <a href="https://BretStaton.com"  style="color:white;">Bret Staton</a></div>
+</div>
+
+
+<!-----
+
+///////////////////
+// START Pull Job Info from GET Requestto Auto fill Form ///
+//   This function allows a Admin to Disable or enable a Account.
+if ( isset($_GET['int_cash_pool_date']) ){
+	$int_cash_pool_date = intval($_GET['int_cash_pool_date']);
+	fun_check_db_for_existing_values($str_sql) 
+	// Pull the Data from the Database
+	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
+	$str_sql = "SELECT `cash_pool_id` FROM `cash_pool_table` WHERE `cash_pool_month` = '' AND `cash_pool_year` = ''";
+	
+	$str_sql      = "SELECT `job_id`, `job_name`, `job_description`, `job_xp_value` FROM `jobs` WHERE `job_id` = '$int_job_info' ";
+	$str_result   = mysqli_query($str_dbConnect,$str_sql);
+	// Build a table with the data given.
+	while($ary_row = mysqli_fetch_array($str_result)) {
+		
+	}
+}
+/// END Pull Job Info from GET Requestto Auto fill Form  ///
+//
 
 echo '<script>
-function fun_pull_job_info(str_job_name) {
-    if (str_job_name == "") {
-        document.getElementById("str_job_info").innerHTML = "";
+///////////////////
+/// START Dynamic Cash Pool Update Function ///
+//   Facilitates pulling info the the database with changes on the form occure.
+///
+function fun_pull_pool_data(int_cp_month,int_cp_year ) {
+    if (int_cash_pool_date == "") {
+        document.getElementById("int_cash_pool_date").innerHTML = "";
         return;
     } else { 
         if (window.XMLHttpRequest) {
@@ -85,125 +158,19 @@ function fun_pull_job_info(str_job_name) {
         }
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("str_job_info").innerHTML = this.responseText;
+                document.getElementById("int_cash_pool_date").innerHTML = this.responseText;
             }
         };
-        xmlhttp.open("GET",".functions/.xp_request?int_job_info="+str_job_name,true);
+		// Connects to the backend script to get the data about the job. This auto fills the area
+		//   Below the form with the info about the job.
+        xmlhttp.open("GET","?int_cp_month=" +int_cp_month +"&int_cp_year="+ int_cp_month,true);
         xmlhttp.send();
     }
 }
+///
+// END Dynamic Job Description Update Function  ///
+//
 </script>';
 
-echo'<select name="ary_jobs_list" onchange="fun_pull_job_info(this.value)">
-<option value="">Select a Job</option>';
-// Connect to the database build a select box with all active jobs.
-require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
-$str_sql = "SELECT `job_name`, `job_id` FROM `jobs` WHERE `job_active` = 1 ";
-$str_result = mysqli_query($str_dbConnect,$str_sql);
-// While there are rows in of retreaved username data, echo data into the selcet box.
-while($ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC)) {
-	echo '<option value="' . $ary_row['job_id'] .'">' . $ary_row['job_name'] . '</option>';
-}
-echo '</select><br />';
-?>
-        <input name="var_page" type="hidden" value="admin_console" />
-        <p><input autofocus="autofocus" tabindex="0" name="int_ticket_number" type="text" maxlength="127" placeholder="Ticket Number" /></p>
-        <p><label>Bonus XP Request Value</label><br />
-        <input name="int_bonus_xp_request_value" type="text" size="8" maxlength="8" /></p>        
-        <p><textarea name="str_bonus_request_reason" cols="30" rows="5" placeholder="Bonus Request Reason"></textarea></p>
-        <input name="user_submit_xp_request" type="submit" value="Submit" />        
-        <div id="str_job_info" class="content"><b>Job Description...</b></div>
-    </form>
-    </td></tr>
-</table>
+
 --->
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial;
-}
-
-/* The grid: Three equal columns that floats next to each other */
-.column {
-    float: center;
-    width: 100%;
-    padding: 10px;
-    text-align: left;
-    font-size: 15px;
-    cursor: pointer;
-    color: white;
-}
-
-.container-tab {
-    padding: 10px;
-    color: white;
-}
-
-/* Clear floats after the columns */
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-/* Closable button inside the container tab */
-.closebtn {
-    float: left;
-    color: white;
-    font-size: 35px;
-    cursor: pointer;
-}
-</style>
-<!-- 
-$str_sql = "SELECT `xp_id`, `user_id`, `job_id`, `ticket_number`, `date_submitted`, `requested_xp`, `bonus_xp`, `bonus_reason` FROM `xp_data` WHERE `reviewed_status` = false";
-
--->
-
-<div class="row">
-  <div class="column" onclick="fun_expand_tab('b1');" style="background:green;">
-    Box 1
-  </div>
-  <div id="b1" class="container-tab" style="display:none;background:green">
-  <span style="text-align:left" onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
-  <h2>Box 1</h2>
-  <p>Lorem ipsum dolor sit amet, te quo doctus abhorreant, et pri deleniti intellegat, te sanctus inermis ullamcorper nam. Ius error diceret deseruisse ad</p>
-</div>
-  
-  
-  <div class="column" onclick="fun_expand_tab('b2');" style="background:blue;">
-    Box 2
-  </div>
-  
-<div id="b2" class="container-tab" style="display:none;background:blue">
-  <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
-  <h2>Box 2</h2>
-  <p>Lorem ipsum dolor sit amet, te quo doctus abhorreant, et pri deleniti intellegat, te sanctus inermis ullamcorper nam. Ius error diceret deseruisse ad</p>
-</div>
-
-<!-- Full-width columns: (hidden by default) -->
-
-
-
-
-
-<script>
-function fun_expand_tab(str_tab_name) {
-  var i, x;
-  x = document.getElementsByClassName("container-tab");
-  for (i = 0; i < x.length; i++) {
-     x[i].style.display = "none";
-  }
-  document.getElementById(str_tab_name).style.display = "block";
-}
-</script>
-
-
-	</div>
-<div class="footer" align="center">DC XP Tracker &copy; <a href="https://BretStaton.com"  style="color:white;">Bret Staton</a></div>
-</div>
-
-
