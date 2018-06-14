@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", true);
 ///////////////////
 //  Import Global Funtions.
-require($_SERVER["DOCUMENT_ROOT"].".functions/.global.functions.php");
+require_once($_SERVER["DOCUMENT_ROOT"].".functions/.global.functions.php");
 ///
 //  Confirm the User has Admin Rights.
 fun_check_admin_rights();
