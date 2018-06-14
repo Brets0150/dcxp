@@ -1,6 +1,9 @@
 <?php
 ///
-// START Home Page Content //
+///////////////////////////////
+// START Home Page Content ///
+/////////////////////////////
+// START  //
 echo '
 <div class="homepage-container">
   <div class="header"><h1 class="header" align="center">Welcome to DC XP Tracker!</h1></div>
@@ -12,6 +15,8 @@ echo '
 			<p>Remeber, XP can both be gained and lost!</p>
 		</div>
 </div>';
-// END Home Page Content //
+///////////////////////////////
+// END Home Page Content /////
+/////////////////////////////
 //
 ?>
