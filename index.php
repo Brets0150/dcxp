@@ -1,6 +1,7 @@
 <?php 
-////////////////////////////////////////////////////////////////
+/////////////////////////////
 // START Main INDEX Page ///
+///////////////////////////
 ///
 // Import Header
 require(".pages/header.php");
@@ -23,7 +24,7 @@ if (isset($_SESSION["str_username"])) {
 	echo '<h1 style="padding: 10px 10px 10px 32px;background-color: #172FB2;text-decoration: none;font-size: 25px;color: white;transition: 0.3s;border: none;">
 	<u>User:&nbsp;&nbsp;'.$_SESSION["str_username"].'</u></h1>';
 	echo '<form action="/" method="post" enctype="multipart/form-data" name="xpr_form"><input name="var_page" type="hidden" value="xp_request" /><input type="submit" value="XP Request" /></form>';
-	echo '<form action="/" method="post" enctype="multipart/form-data" name="xps_form"><input name="var_page" type="hidden" value="xp_score_board" /><input type="submit" value="Score Board" /></form>';
+	echo '<form action="/" method="post" enctype="multipart/form-data" name="xps_form"><input name="var_page" type="hidden" value="xp_score_board" /><input type="submit" value="Scoreboard" /></form>';
 	// If the logged in User has admin status show admin_control link.
 	if ($_SESSION["bln_admin"]) {
 		echo '<form action="/" method="post" enctype="multipart/form-data" name="adc_form"><input name="var_page" type="hidden" value="admin_console" /><input type="submit" value="Admin Control" /></form>';
@@ -75,6 +76,8 @@ if ( (isset($_POST["var_page"])) && (!empty($_POST["var_page"])) ) {
 // Load Footer
 require(".pages/footer.php")
 ///
-// END Main INDEX Page ///
-////////////////////////////////////////////////////////////////
+/////////////////////////////
+// END Main INDEX Page /////
+///////////////////////////
+///
 ?>

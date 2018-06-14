@@ -1,6 +1,7 @@
 <?php
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////
 // START Admin Control Page Content //
+/////////////////////////////////////
 ///
 session_start();
 ///////////////////
@@ -92,7 +93,8 @@ function fun_admin_user_control_form() {
         <tr><td><label>Enable a User Account</label></td>
         </tr>
         <tr>
-        <td><form action="/.functions/.admin_user_controls" method="post" enctype="multipart/form-data" name="admin_enable_user_form">
+        <td>
+		<form action="/.functions/.admin_user_controls" method="post" enctype="multipart/form-data" name="admin_enable_user_form">
             <select name="ary_user_list">';
 	// The echo stoped at the "Select form, so a databaser call can be made to build the select box the all the "username"s and "user_id"s.	
 	// Connect to the database and look up if a Username and password match the provided credentials.
@@ -163,7 +165,7 @@ function fun_admin_review_tickets_form() {
 	// Echo out the header/first row of the DIV-table that will follow.
 	echo '<div class="row" style="background-color:black;">
 			<div class="column" >
-				<p>UserNane</p>
+				<p>Username</p>
 			</div>
 			
 			<div class="column" >
@@ -246,7 +248,7 @@ function fun_admin_review_tickets_form() {
 		echo '<input name="xp_id" type="hidden" value="'.$ary_row['xp_id'].'" />
 				<textarea name="str_admin_feedback" id="str_admin_feedback" cols="" rows="" placeholder="Feedback on work preformance." style="width:80%;padding:5px;border-radius:5px;" ></textarea><br/>
 				<input id="int_base_xp_value_'.$ary_row['xp_id'].'"  maxlength="8" name="int_total_xp_value" type="number" size="8" value="'.$ary_row['requested_xp'].'" style="border-radius:5px;" />
-				<br /><input name="admin_submit_xp_review" type="submit" value="Accept" />
+				<br/><br/><input name="admin_submit_xp_review" type="submit" value="Accept" />
 				<input name="admin_submit_xp_review" type="submit" value="Denied" />
 			</form>
 		</div> 
@@ -352,7 +354,10 @@ function fun_admin_jobs_form() {
 ///////////////////
 /// START Admin-Other-Setting-FORM Funtion Code ///
 function fun_admin_other_setting_form() {
-	echo "admin_other_settings_form";
+	echo "admin_other_settings_form <br/> In progress...
+	<br/> Need control to change Ticket Settings Link.
+	<br/> Need way for Users to update there passwords.
+	";
 }
 ///
 /// END Admin-Other-Setting-FORM Funtion Code ///
@@ -394,6 +399,8 @@ switch ($_POST["var_admin_page"]) {
 ///
 echo '</div></div>'; /// END of the div class="content"
 ///
-// END Admin Control Page Content //
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////
+// END Admin Control Page Content ////
+/////////////////////////////////////
+///
 ?>

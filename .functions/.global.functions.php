@@ -128,7 +128,7 @@ function fun_get_one_varabile_from_db($str_tmp_sql, $var_column_to_return) {
 	///
 	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
 	$str_result = mysqli_query($str_dbConnect,$str_tmp_sql);
-	$ary_row = mysqli_fetch_array($str_result,MYSQLI_ASSOC);
+	$ary_row = mysqli_fetch_array($str_result);
 	// return the results of the check.
 	return($ary_row[$var_column_to_return]);
 }
