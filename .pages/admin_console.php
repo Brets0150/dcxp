@@ -184,7 +184,7 @@ function fun_admin_review_tickets_form() {
 	// Connect to the database and pull all the records of ticket/XP-Request that need to be reviewed.
 	////// !!!!!FEATURE NEEDED!!!!! Change to to limit the number of rows pulled, and create a "page" system.
 	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
-	$str_sql = "SELECT `xp_id`, `user_id`, `job_id`, `ticket_number`, `date_submitted`, `requested_xp`, `bonus_xp`, `bonus_reason` FROM `xp_data` WHERE `reviewed_status` = false";
+	$str_sql = "SELECT `xp_id`, `user_id`, `job_id`, `ticket_number`, `date_submitted`, `requested_xp`, `bonus_xp`, `bonus_reason` FROM `xp_data` WHERE `reviewed_status` = false ORDER BY `date_submitted` DESC";
 	$str_result = mysqli_query($str_dbConnect,$str_sql);
 	///
 	/// Start a counter. This conter is increment for each loop made in the next WHILE statment. This counter is used to alternate the colors of the rows(if odd do this, if even do this).

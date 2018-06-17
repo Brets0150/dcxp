@@ -143,7 +143,7 @@ if ( isset($_POST['admin_submit_add_user']) ) {
 					mysqli_close($str_dbConnect);
 					// FINALLY, the new user has been added into the database. Report the success and give the new users password to the admin.
 					fun_message_redirect("admin_console","Successfully added " . $str_new_username . 
-					".  " . $str_new_username . ' new password is "' . $str_new_users_password . '", without the quote marks.');
+					".  " . $str_new_username . "'s new password is ".'"'. $str_new_users_password . '", without the quote marks.');
 				}
 				///
 			} else { // Either the Username or Email address checks failed, or the "$bln_admin_rights" is not set correctly

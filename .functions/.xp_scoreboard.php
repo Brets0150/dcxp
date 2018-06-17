@@ -21,20 +21,21 @@ fun_check_user_rights();
 ///////////////////
 /// START Admin-Sub-Navbar-FORM Funtion Code ///
 if ( (isset($_GET['int_scoreboard_month'])) && (isset($_GET['int_scoreboard_year'])) ) {
+	// Get the date requested variables from the GET request.
+	$int_month_selected = $_GET['int_scoreboard_month'];
+	$int_year_selected  = $_GET['int_scoreboard_year'];
+	///
 	///////////////////
 	// Start Page Contects that will be Dynamically updated ////
 	//    The Below DIV is linked to the AJAX function that will Dynamiclly update the data on the page. 
 	//    From here to the end of the DIV, the Content will be changed as the year and month select change.
-	echo '	<span class="span_display_board" id="span_display_board" >
-			<div class="content" style="border-bottom-left-radius:0px;border-bottom-right-radius:0px;" >';
+	echo '	<span class="span_display_board" id="span_display_board" >';
+	// START Page Display content ///
+	echo '<div class="content" style="border-bottom-left-radius:0px;border-bottom-right-radius:0px;" >';
 	///
-	$int_month_selected = $_GET['int_scoreboard_month'];
-	$int_year_selected  = $_GET['int_scoreboard_year'];
 	///////////////////
 	// START Get Cash Pool Amount
 	///
-	// Connect to the database.
-	require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
 	// Pull the current cash pool amount to calculate user percentages.
 	$str_sql_cash_pool =   "SELECT `cash_pool_value` FROM `cash_pool_table` 
 							WHERE (`cash_pool_month` = $int_month_selected )
@@ -42,6 +43,9 @@ if ( (isset($_GET['int_scoreboard_month'])) && (isset($_GET['int_scoreboard_year
 	// Uses the function to return the cash amount for the month.
 	$int_cash_pool_amount = fun_get_one_varabile_from_db($str_sql_cash_pool, 'cash_pool_value');
 	settype($int_cash_pool_amount, 'integer');
+	//
+	// Echo Out the Cash Pool amount.
+	echo '<p align="center"<lablel style="align:center;"><strong>Cash Pool This Month is $'. $int_cash_pool_amount . '</strong></label></p>';
 	///
 	// END Get Cash Pool Amount ////
 	///////////////////
@@ -135,6 +139,9 @@ if ( (isset($_GET['int_scoreboard_month'])) && (isset($_GET['int_scoreboard_year
 	// Echo out the header/first row of the DIV-table that will follow.
 		echo '
 		<div class="content" >
+		<div class="row" align="center">
+			<lablel><strong>Your Ticket History For the Month</strong></label>
+		</div class="row">
 		<div class="row" style="background-color:black;">
 				<div class="column" >
 					<p>Ticket Number</p>
@@ -215,17 +222,17 @@ if ( (isset($_GET['int_scoreboard_month'])) && (isset($_GET['int_scoreboard_year
 					</div>';
 			// The Status bar changes baed on the status of the Job. Approved == Greeen, Waiting Review == Yellow, Denied == Red;
 			if  ( $ary_row['reviewed_status'] == false ) { // The Request has not been reviewed.
-				echo '	<div class="column" style="background-color:yellow;">
+				echo '	<div class="column" style="background-color:DarkOrange;">
 							<p>Waiting Review</p>
 						</div>
 					 </div>';
 			} elseif ( $ary_row['xp_accepted'] == true ) { // The Request for XP was reviewed and Approved.
-				echo '	<div class="column" style="background-color:green;">
+				echo '	<div class="column" style="background-color:DarkGreen;">
 						<p>Approved</p>
 					</div>
 				 </div>';
 			} elseif ( $ary_row['xp_accepted'] == false ) {  // The request for XP was reviewed, but denied.
-				echo '	<div class="column" style="background-color:red;">
+				echo '	<div class="column" style="background-color:DarkRed;">
 						<p>Denied</p>
 					</div>
 				 </div>';

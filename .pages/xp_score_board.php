@@ -77,21 +77,10 @@ $int_month_selected = date('m');
 $int_year_selected  = date('Y');
 ///
 ///////////////////
-// START Get Cash Pool Amount
+// START Get Total of all Users XP ///
 ///
 // Connect to the database.
 require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
-// Pull the current cash pool amount to calculate user percentages.
-$str_sql_cash_pool =   "SELECT `cash_pool_value` FROM `cash_pool_table` 
-						WHERE (`cash_pool_month` = $int_month_selected )
-						AND (`cash_pool_year` = $int_year_selected )";
-// Uses the function to return the cash amount for the month.
-$int_cash_pool_amount = fun_get_one_varabile_from_db($str_sql_cash_pool, 'cash_pool_value');
-settype($int_cash_pool_amount, 'integer');
-///
-// END Get Cash Pool Amount ////
-///////////////////
-// START Get Total of all Users XP ///
 ///
 $str_sql_all_users_xp =    "SELECT SUM(`final_xp_score`) FROM `xp_data` 
 							WHERE (MONTH(`date_submitted`) = $int_month_selected )
@@ -118,7 +107,6 @@ echo '<div class="header"><h1 class="header" align="center">Scoreboard</h1></div
 echo '
 	<div class="sub-header">
 		<div class="sub-navbar" align="center" style="width:100%;">
-			<lable><strong>Cash Pool This Month is $'. $int_cash_pool_amount . '</strong></label><br>
 				<form action="/.pages/xp_score_board" method="get" enctype="multipart/form-data" name="admin_submit_cash_pool">';
 ///
 // Create a select box that auto sets to the current month.
@@ -142,21 +130,35 @@ foreach(range('2015', '2025') as $int_year) {
 	echo '>'. $int_year . '</option>';
 }
 echo '		</select>
-		</form>
+		</form> 
 	</div class="sub-navbar">
-</div class="sub-header">
-	';
+</div class="sub-header">';
 ///
 // End the year and month select box.
-///
-// END DISPLAY Cash Pool Amount and Date Select Control Boxes ////	
 ///
 ///////////////////
 // Start Page Contects that will be Dynamically updated ////
 //    The Below DIV is linked to the AJAX function that will Dynamiclly update the data on the page. 
 //    From here to the end of the DIV, the Content will be changed as the year and month select change.
-echo '	<span class="span_display_board" id="span_display_board" >
-		<div class="content" style="border-bottom-left-radius:0px;border-bottom-right-radius:0px;" >';
+echo '<span class="span_display_board" id="span_display_board" >';
+// START Page Display content ///
+echo '<div class="content" style="border-bottom-left-radius:0px;border-bottom-right-radius:0px;" >';
+///
+///////////////////
+// START Get Cash Pool Amount
+///
+// Pull the current cash pool amount to calculate user percentages.
+$str_sql_cash_pool =   "SELECT `cash_pool_value` FROM `cash_pool_table` 
+						WHERE (`cash_pool_month` = $int_month_selected )
+						AND (`cash_pool_year` = $int_year_selected )";
+// Uses the function to return the cash amount for the month.
+$int_cash_pool_amount = fun_get_one_varabile_from_db($str_sql_cash_pool, 'cash_pool_value');
+settype($int_cash_pool_amount, 'integer');
+//
+// Echo Out the Cash Pool amount.
+echo '<p align="center"<lablel style="align:center;"><strong>Cash Pool This Month is $'. $int_cash_pool_amount . '</strong></label></p>';
+///
+// END Get Cash Pool Amount ////
 ///
 // String used to pull all active users from the database.
 $str_sql = "SELECT `user_id`, `username` FROM `user_data` WHERE `account_active` = 1";
@@ -222,6 +224,9 @@ echo ' </b></div class="content" >';
 // Echo out the header/first row of the DIV-table that will follow.
 	echo '
 	<div class="content" >
+	<div class="row" align="center">
+		<lablel><strong>Your Ticket History For the Month</strong></label>
+	</div class="row">
 	<div class="row" style="background-color:black;">
 			<div class="column" >
 				<p>Ticket Number</p>
@@ -302,17 +307,17 @@ while( $ary_row_users = mysqli_fetch_array($str_result,MYSQLI_ASSOC) ) {
 				</div>';
 		// The Status bar changes baed on the status of the Job. Approved == Greeen, Waiting Review == Yellow, Denied == Red;
 		if  ( $ary_row['reviewed_status'] == false ) { // The Request has not been reviewed.
-			echo '	<div class="column" style="background-color:yellow;">
+			echo '	<div class="column" style="background-color:DarkOrange;">
 						<p>Waiting Review</p>
 					</div>
 				 </div>';
 		} elseif ( $ary_row['xp_accepted'] == true ) { // The Request for XP was reviewed and Approved.
-			echo '	<div class="column" style="background-color:green;">
+			echo '	<div class="column" style="background-color:DarkGreen;">
 					<p>Approved</p>
 				</div>
 			 </div>';
 		} elseif ( $ary_row['xp_accepted'] == false ) {  // The request for XP was reviewed, but denied.
-			echo '	<div class="column" style="background-color:red;">
+			echo '	<div class="column" style="background-color:DarkRed;">
 					<p>Denied</p>
 				</div>
 			 </div>';
@@ -331,13 +336,13 @@ while( $ary_row_users = mysqli_fetch_array($str_result,MYSQLI_ASSOC) ) {
 					<br /><label><strong>Date Reviewed:</strong>' . $ary_row['date_reviewed'] .'</label><br />
 					<p style="border-radius:5px; border: 1px solid black; padding:10px;width:80%;" > 
 					<u><label>Preformance Feedback</label></u><br/>
-					<textarea rows="4" wrap="hard" style="display:block;width:99%" >' .nl2br($ary_row['review_feedback'], true).'</textarea></p>';
+					<textarea readonly="readonly" rows="4" wrap="hard" style="display:block;width:99%" >' .nl2br($ary_row['review_feedback'], true).'</textarea></p>';
 		///
 		// If there is a request for Extra XP add the below to the form
 		if ( $ary_row['bonus_xp'] > 0 ) {
 			echo '<p style="border-radius:5px;border:1px solid black;padding:10px;width:80%;">
 			<label><u>Bonus XP Reuested:</u><strong>' . $ary_row['bonus_xp'] .'</strong></label><br/>
-			<textarea rows="4" wrap="hard" style="display:block;width:99%" >' . nl2br($ary_row['bonus_reason'], true) . '</textarea></p>';
+			<textarea readonly="readonly" rows="4" wrap="hard" style="display:block;width:99%" >' . nl2br($ary_row['bonus_reason'], true) . '</textarea></p>';
 			}
 		/// Admin Feedback section 
 		echo '</div>

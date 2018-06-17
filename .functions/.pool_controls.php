@@ -1,6 +1,7 @@
 <?php
-////////////////////////////////////////////////////////////////
-// START Cash Pools Control //
+////////////////////////////////
+// START Cash Pools Control ///
+//////////////////////////////
 ///
 session_start();
 ///////////////////
@@ -20,29 +21,28 @@ fun_check_admin_rights();
 ///
 if ( isset($_POST['submit_cash_pool_add']) ) {
 	// Clean and prep the data.
-	$int_cach_pool_month  = fun_clean_input_data($_POST['int_cash_pool_month']);
-	$int_cach_pool_year   = fun_clean_input_data($_POST['int_cash_pool_year']);
-	$int_cach_pool_amount = fun_clean_input_data($_POST['int_usd_cash_amount']);
-	settype($int_cach_pool_month, 'integer');
-	settype($int_cach_pool_year, 'integer');
-	settype($int_cach_pool_amount, 'integer');
+	$int_cash_pool_month  = fun_clean_input_data($_POST['int_cash_pool_month']);
+	$int_cash_pool_year   = fun_clean_input_data($_POST['int_cash_pool_year']);
+	$int_cash_pool_amount = fun_clean_input_data($_POST['int_usd_cash_amount']);
+	settype($int_cash_pool_month, 'integer');
+	settype($int_cash_pool_year, 'integer');
+	settype($int_cash_pool_amount, 'integer');
 	///
 	// Check to make sure all needed values are still present.
-	if ( (!empty($int_cach_pool_amount)) && (!empty($int_cach_pool_month)) && (!empty($int_cach_pool_year)) ) {
+	if ( (!empty($int_cash_pool_amount)) && (!empty($int_cash_pool_month)) && (!empty($int_cash_pool_year)) ) {
 		// All values still found.
 		///
 		// Check if a value for the month and year already exist in the database.
-		$str_sql = "SELECT `cash_pool_id` FROM `cash_pool_table` WHERE `cash_pool_month` = '$int_cach_pool_month' AND `cash_pool_year` = '$int_cach_pool_month'";
+		$str_sql = "SELECT `cash_pool_id` FROM `cash_pool_table` WHERE `cash_pool_month` = '$int_cash_pool_month' AND `cash_pool_year` = '$int_cash_pool_year'";
 		$bln_record_for_that_month_year_exist = fun_check_db_for_existing_values($str_sql);
 		settype($bln_record_for_that_month_year_exist, "bool");
 		unset($str_sql);
-		if ( $bln_record_for_that_month_year_exist == false ) {
-			unset($str_sql);
+		if ( !$bln_record_for_that_month_year_exist ) {
 			// Connect to the DB and INSERT the new user record.
 			require($_SERVER["DOCUMENT_ROOT"].".config/.sql.php");
 			// Build SQL INSERT Statment.
 			$str_sql = "INSERT INTO `cash_pool_table`(`cash_pool_month`, `cash_pool_year`, `cash_pool_value`) 
-						VALUES ('$int_cach_pool_month','$int_cach_pool_year','$int_cach_pool_amount')";
+						VALUES ('$int_cash_pool_month','$int_cash_pool_year','$int_cash_pool_amount')";
 			if ( !mysqli_query($str_dbConnect,$str_sql) ) {
 				$str_error_code = "ERROR: Failed to insert into the Database. " . mysqli_error($str_dbConnect) . "Mysql command given: --> " . $str_sql;
 				unset($str_sql);
@@ -95,6 +95,7 @@ if ( isset($_POST['submit_cash_pool_delete']) ) {
 // END DELETE Cash to pool Code ///
 //
 ///
-// END Cash Pools Control //
-////////////////////////////////////////////////////////////////
+////////////////////////////////
+// END Cash Pools Control /////
+//////////////////////////////
 ?>
